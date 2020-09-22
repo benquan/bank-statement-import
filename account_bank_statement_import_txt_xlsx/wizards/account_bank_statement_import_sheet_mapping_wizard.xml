@@ -32,6 +32,7 @@
                         <field name="file_encoding" />
                         <field name="delimiter" />
                         <field name="quotechar" />
+                        <field name="skip_lines" />
                     </group>
                 </group>
                 <group name="final" attrs="{'invisible': [('state', '!=', 'final')]}">

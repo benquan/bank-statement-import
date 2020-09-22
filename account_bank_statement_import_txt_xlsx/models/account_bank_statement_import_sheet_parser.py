@@ -103,6 +103,9 @@ class AccountBankStatementImportSheetParser(models.TransientModel):
                 **csv_options
             )
 
+        #qs skip
+        for i in range(mapping.skip_lines): next(csv_or_xlsx)
+
         if isinstance(csv_or_xlsx, tuple):
             header = [str(value) for value in csv_or_xlsx[1].row_values(0)]
         else:
@@ -372,4 +375,6 @@ class AccountBankStatementImportSheetParser(models.TransientModel):
         thousands, decimal = mapping._get_float_separators()
         value = value.replace(thousands, "")
         value = value.replace(decimal, ".")
+        #QS added line
+        value = value.replace("USD", "")
         return Decimal(value)

@@ -28,6 +28,7 @@ class AccountBankStatementImportSheetMappingWizard(models.TransientModel):
         string="Delimiter", selection=lambda self: self._selection_delimiter(),
     )
     quotechar = fields.Char(string="Text qualifier", size=1,)
+    skip_lines = fields.Integer(string="Skip Lines", )
     timestamp_column = fields.Char(string="Timestamp column",)
     currency_column = fields.Char(
         string="Currency column",
@@ -140,6 +141,7 @@ class AccountBankStatementImportSheetMappingWizard(models.TransientModel):
             "file_encoding": self.file_encoding,
             "delimiter": self.delimiter,
             "quotechar": self.quotechar,
+            "skip_lines": self.skip_lines,
             "timestamp_format": "%d/%m/%Y",
             "timestamp_column": self.timestamp_column,
             "currency_column": self.currency_column,
