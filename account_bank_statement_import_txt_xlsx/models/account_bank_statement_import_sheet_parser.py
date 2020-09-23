@@ -103,12 +103,10 @@ class AccountBankStatementImportSheetParser(models.TransientModel):
                 **csv_options
             )
 
-        #qs skip
-        for i in range(mapping.skip_lines): next(csv_or_xlsx)
-
         if isinstance(csv_or_xlsx, tuple):
-            header = [str(value) for value in csv_or_xlsx[1].row_values(0)]
+            header = [str(value) for value in csv_or_xlsx[1].row_values(mapping.skip_lines-1)]
         else:
+            for i in range(mapping.skip_lines): next(csv_or_xlsx)
             header = [value.strip() for value in next(csv_or_xlsx)]
         columns["timestamp_column"] = header.index(mapping.timestamp_column)
         columns["currency_column"] = (
@@ -166,7 +164,8 @@ class AccountBankStatementImportSheetParser(models.TransientModel):
 
     def _parse_rows(self, mapping, currency_code, csv_or_xlsx, columns):  # noqa: C901
         if isinstance(csv_or_xlsx, tuple):
-            rows = range(1, csv_or_xlsx[1].nrows)
+            # rows = range(1, csv_or_xlsx[1].nrows)
+            rows = range(mapping.skip_lines, csv_or_xlsx[1].nrows)
         else:
             rows = csv_or_xlsx
 
@@ -375,6 +374,5 @@ class AccountBankStatementImportSheetParser(models.TransientModel):
         thousands, decimal = mapping._get_float_separators()
         value = value.replace(thousands, "")
         value = value.replace(decimal, ".")
-        #QS added line
         value = value.replace("USD", "")
         return Decimal(value)
